@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Productify.Context;
+using Productify.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,14 +13,20 @@ s.AddCors(c =>
 
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
-
+builder.Services.AddScoped<ProdutoRepository>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<Productify.Context.ModelContext>(options =>
+
+// Database Context Dependency Injection
+var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+var dbName = Environment.GetEnvironmentVariable("DB_NAME");
+var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
+var connection = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword}";
+builder.Services.AddDbContext<ModelContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DB"));
+    options.UseSqlServer(connection);
 });
 
 var app = builder.Build();
@@ -26,16 +34,15 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
 }
-app.UseStaticFiles();
 
-app.UseRouting();
+app.UseCors("AllowOrigin");
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllers();
 
 app.Run();

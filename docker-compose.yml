@@ -1,7 +1,10 @@
 version: '3.4'
 
+networks:
+  productifyapp:
+
 services:
-  db:
+  productifydb:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: productify-db
     environment:
@@ -9,12 +12,20 @@ services:
       ACCEPT_EULA: "Y"
     ports:
       - "8002:1433"
+    networks:
+      - productifyapp
 
-  productify:
-    container_name: productify-app
+  productifyapi:
+    container_name: productify-api
     image: ${DOCKER_REGISTRY-}productify
     build:
       context: .
       dockerfile: productify/Dockerfile
     depends_on:
-      - db
+      - productifydb
+    environment:
+        - DB_HOST=productifydb
+        - DB_NAME=Productify   
+        - DB_SA_PASSWORD=password@12345#
+    networks:
+      - productifyapp
