@@ -15,17 +15,20 @@ services:
     networks:
       - productifyapp
 
-  productifyapi:
-    container_name: productify-api
-    image: ${DOCKER_REGISTRY-}productify
+  productifyback:
+    container_name: productify-back
+    image: ${DOCKER_REGISTRY-}productify-back
     build:
       context: .
-      dockerfile: productify/Dockerfile
+      dockerfile: productify-back/Dockerfile
     depends_on:
       - productifydb
     environment:
         - DB_HOST=productifydb
         - DB_NAME=Productify   
         - DB_SA_PASSWORD=password@12345#
+        - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8080:80"
     networks:
       - productifyapp

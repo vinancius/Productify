@@ -6,9 +6,12 @@ namespace Productify.Controllers
 {
     [ApiController]
     [Route("api/produtos")]
-    public class ProdutorController : SuperController
+    public class ProdutoController : ControllerBase
     {
-        public ProdutorController(ProdutoRepository _produtoRepository) : base(_produtoRepository) { }
+        private readonly ProdutoRepository _produtoRepository;
+        public ProdutoController(ProdutoRepository produtoRepository) {
+            _produtoRepository = produtoRepository;
+        }
 
         [HttpGet]
         public async Task<IActionResult> ListProdutos(int page = 1, int pageSize = 5)
@@ -30,6 +33,14 @@ namespace Productify.Controllers
 
             return NotFound();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AdicionarProduto([FromBody] Produto produto)
+        {
+            await _produtoRepository.AdicionarProduto(produto);
+            return CreatedAtAction(nameof(GetHashCode), new {id = produto.ID}, produto);
+        }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> AtualizarProduto(int id, [FromBody] Produto produto)
