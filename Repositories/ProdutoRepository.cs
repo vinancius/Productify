@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Productify.Context;
-using Productify.Models;
+using Productify_back.Context;
+using Productify_back.Models;
+using Productify_back.DTO;
 
-namespace Productify.Repositories
+namespace Productify_back.Repositories
 {
     public class ProdutoRepository
     {
@@ -13,11 +14,27 @@ namespace Productify.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Produto>> ListProdutos(int page, int pageSize)
+        public async Task<ListaPaginadaDTO> ListProdutos(int page, int pageSize, ProdutoDTO filtro)
         {
-            var produtos = await _context.Produtos.Skip((page - 1) * pageSize)
-                .Take(pageSize).ToListAsync();
-            return produtos ?? Enumerable.Empty<Produto>();
+            var query = _context.Produtos.AsQueryable();
+
+            query = query.Skip((page - 1) * pageSize)
+                .Take(pageSize);
+
+            if (!string.IsNullOrEmpty(filtro.Nome))
+            {
+                query = query.Where(p => p.Nome.Equals(filtro));
+            }
+
+            if (!string.IsNullOrEmpty(filtro.Descricao))
+            {
+                query = query.Where(p => p.Descricao.Equals(filtro));
+            }
+
+            var produtos = await query.ToListAsync();
+            var total = await query.CountAsync();
+
+            return new ListaPaginadaDTO(produtos, page, total, pageSize); ;
         }
 
         public async Task<Produto> ListProdutoById(int id)
@@ -25,10 +42,13 @@ namespace Productify.Repositories
             return await _context.Produtos.FindAsync(id);
         }
 
-        public async Task AdicionarProduto(Produto produto)
+        public async Task<int> AdicionarProduto(Produto produto)
         {
+            produto.SetDataDeCriacao();
+
             _context.Produtos.Add(produto);
             await _context.SaveChangesAsync();
+            return produto.ID;
         }
 
         public async Task AtualizarProduto(Produto produto)

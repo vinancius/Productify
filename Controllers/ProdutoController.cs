@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Productify.Models;
-using Productify.Repositories;
+using Productify_back.Models;
+using Productify_back.Repositories;
+using Productify_back.DTO;
 
-namespace Productify.Controllers
+namespace Productify_back.Controllers
 {
     [ApiController]
     [Route("api/produtos")]
@@ -13,52 +14,88 @@ namespace Productify.Controllers
             _produtoRepository = produtoRepository;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ListProdutos(int page = 1, int pageSize = 5)
+        [HttpGet(Name = "ListProdutos")]
+        public async Task<IActionResult> ListProdutos([FromQuery] ProdutoDTO filtro, [FromQuery] int page = 1, [FromQuery] int pageSize = 5)
         {
-            var produtos = await _produtoRepository.ListProdutos(page, pageSize);
+            try
+            {
+                var produtos = await _produtoRepository.ListProdutos(page, pageSize, filtro);
 
-            return Ok(produtos);
+                return Ok(produtos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> ListProdutoById(int id)
+        public async Task<IActionResult> ListProdutoById([FromRoute] int id)
         {
-            var produto = await _produtoRepository.ListProdutoById(id);
-
-            if(produto != null)
+            try
             {
-                return Ok(produto); 
-            }
+                var produto = await _produtoRepository.ListProdutoById(id);
 
-            return NotFound();
+                if(produto != null)
+                {
+                    return Ok(produto); 
+                }
+
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> AdicionarProduto([FromBody] Produto produto)
         {
-            await _produtoRepository.AdicionarProduto(produto);
-            return CreatedAtAction(nameof(GetHashCode), new {id = produto.ID}, produto);
-        }
-
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> AtualizarProduto(int id, [FromBody] Produto produto)
-        {
-            if (id != produto.ID)
+            try
             {
-                return BadRequest();
+                var idProduto = await _produtoRepository.AdicionarProduto(produto);
+                return CreatedAtRoute("ListProdutos", new { id = idProduto }, produto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
             }
 
-            await _produtoRepository.AtualizarProduto(produto);
-            return Ok();
         }
 
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> DeletarProduto(int id)
+        public async Task<IActionResult> AtualizarProduto([FromRoute] int id, [FromBody] Produto produto)
         {
-            await _produtoRepository.DeletarProduto(id);
-            return NoContent();
+            try
+            {
+                if (id != produto.ID)
+                {
+                    return BadRequest();
+                }
+
+                await _produtoRepository.AtualizarProduto(produto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletarProduto([FromRoute] int id)
+        {
+            try
+            {
+                await _produtoRepository.DeletarProduto(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }

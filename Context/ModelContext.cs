@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
-using Productify.Models;
+using Productify_back.Models;
 
-namespace Productify.Context
+namespace Productify_back.Context
 {
     public class ModelContext : DbContext
     {

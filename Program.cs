@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Productify.Context;
-using Productify.Repositories;
+using Productify_back.Context;
+using Productify_back.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
