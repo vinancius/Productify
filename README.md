@@ -33,7 +33,7 @@ O banco de dados utilizado foi uma SQL Server, ao iniciar o projeto com o docker
 Criamos um container com um banco SQL server que é consumido pela nossa api. Nosso contexto de conexão
 cria automaticamente nosso schema no banco:
 
-![alt text](./prints/image-7.png)
+![alt text](./prints/image7.png)
 
 # Recursos da Api
 
