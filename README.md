@@ -1,6 +1,6 @@
-﻿# Productify-api
+﻿# Productify-back
 
-O projeto productify-api é um aplicação web ASP.NET Core que é utilizado com a interface web  [productify-front](https://github.com/vinancius/Productify-front). Juntas elas formam um sistema de gerencia de um catálogo de produtos.
+O projeto productify-back é uma aplicação web ASP.NET Core que é utilizada pela interface web  [productify-front](https://github.com/vinancius/Productify-front). Juntas elas formam um sistema de gerencia de um catálogo de produtos.
 
 ## Introdução
 
@@ -16,7 +16,7 @@ De que tecnológias que você precisa instalar?
 
 ### Instalação e Execução
 
-O projeto pode ser inicializado é preciso usar o docker, e na pasta raiz do projeto executar os seguintes comandos:
+O projeto pare ser inicializado é preciso usar o docker, na pasta raiz do projeto executar os seguintes comandos:
 
 ```
 docker build -t productify-back .
