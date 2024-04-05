@@ -16,54 +16,85 @@ namespace Productify_back.Repositories
 
         public async Task<ListaPaginadaDTO> ListProdutos(int page, int pageSize, ProdutoDTO filtro)
         {
-            var query = _context.Produtos.AsQueryable();
-
-            query = query.Skip((page - 1) * pageSize)
-                .Take(pageSize);
-
-            if (!string.IsNullOrEmpty(filtro.Nome))
+            try
             {
-                query = query.Where(p => p.Nome.Equals(filtro));
+                var query = _context.Produtos.AsQueryable();
+
+                query = query.Skip((page - 1) * pageSize)
+                    .Take(pageSize);
+
+                if (!string.IsNullOrEmpty(filtro.Nome))
+                {
+                    query = query.Where(p => p.Nome.Equals(filtro.Nome));
+                }
+
+                if (!string.IsNullOrEmpty(filtro.Descricao))
+                {
+                    query = query.Where(p => p.Descricao.Equals(filtro.Descricao));
+                }
+
+                var produtos = await query.ToListAsync();
+                var total = await query.CountAsync();
+
+                return new ListaPaginadaDTO(produtos, page, total, pageSize); ;
+            } catch (Exception ex) {
+                Console.WriteLine(ex.ToString());
+                throw;
             }
-
-            if (!string.IsNullOrEmpty(filtro.Descricao))
-            {
-                query = query.Where(p => p.Descricao.Equals(filtro));
-            }
-
-            var produtos = await query.ToListAsync();
-            var total = await query.CountAsync();
-
-            return new ListaPaginadaDTO(produtos, page, total, pageSize); ;
         }
 
         public async Task<Produto> ListProdutoById(int id)
         {
-            return await _context.Produtos.FindAsync(id);
+            try 
+            {
+                return await _context.Produtos.FindAsync(id);
+            } catch (Exception ex) {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
         }
 
         public async Task<int> AdicionarProduto(Produto produto)
         {
-            produto.SetDataDeCriacao();
+            try 
+            {
+                produto.SetDataDeCriacao();
 
-            _context.Produtos.Add(produto);
-            await _context.SaveChangesAsync();
-            return produto.ID;
-        }
+                _context.Produtos.Add(produto);
+                await _context.SaveChangesAsync();
+                return produto.Id;
+            } catch (Exception ex) {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+    }
 
         public async Task AtualizarProduto(Produto produto)
         {
-            _context.Entry(produto).State = EntityState.Modified;
+            try
+            {
+                produto.SetDataDeCriacao();
+                _context.Entry(produto).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+            } catch (Exception ex) {
+                    Console.WriteLine(ex.ToString());
+                    throw;
+            }
         }
 
         public async Task DeletarProduto(int id)
         {
-            var produto = await _context.Produtos.FindAsync(id);
-            if (produto != null)
+            try
             {
-                _context.Produtos.Remove(produto);
-                await _context.SaveChangesAsync();
+                var produto = await _context.Produtos.FindAsync(id);
+                if (produto != null)
+                {
+                    _context.Produtos.Remove(produto);
+                    await _context.SaveChangesAsync();
+                }
+            } catch (Exception ex) {
+                Console.WriteLine(ex.ToString());
+                throw;
             }
         }
     }

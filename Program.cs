@@ -6,10 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 //// Habilitar CORS
-var s = builder.Services;
-s.AddCors(c =>
-   c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())
-);
+builder.Services.AddCors();
 
 // Add services to the container.
 builder.Services.AddScoped<ProdutoRepository>();
@@ -36,6 +33,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(c =>
+{
+    c.AllowAnyHeader();
+    c.AllowAnyMethod();
+    c.AllowAnyOrigin();
+});
 
 app.UseAuthorization();
 

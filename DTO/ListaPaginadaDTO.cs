@@ -4,16 +4,16 @@ namespace Productify_back.DTO
 {
     public class ListaPaginadaDTO
     {
-        public List<Produto> Items { get; set; }
-        public int page { get; set; }   
-        public int total { get; set; } 
-        public int totalPages { get; set; }
+        public List<Produto> Itens { get; set; }
+        public int Page { get; set; }   
+        public int Total { get; set; } 
+        public int TotalPages { get; set; }
 
-        public ListaPaginadaDTO(List<Produto> Items, int page, int total, int totalPages) {
-            this.Items = Items;
-            this.page = page;  
-            this.total = total;
-            this.totalPages = totalPages;
+        public ListaPaginadaDTO(List<Produto> itens, int page, int total, int totalPages) {
+            this.Itens = itens;
+            this.Page = page;  
+            this.Total = total;
+            this.TotalPages = totalPages;
         }
     }
 }

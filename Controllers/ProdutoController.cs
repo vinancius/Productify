@@ -70,7 +70,7 @@ namespace Productify_back.Controllers
         {
             try
             {
-                if (id != produto.ID)
+                if (id != produto.Id)
                 {
                     return BadRequest();
                 }

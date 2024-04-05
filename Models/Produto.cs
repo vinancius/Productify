@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Productify_back.DTO;
+using System.ComponentModel.DataAnnotations;
 
 namespace Productify_back.Models
 {
     public class Produto
     {
         [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(45)]
