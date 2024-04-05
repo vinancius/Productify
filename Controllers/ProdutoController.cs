@@ -15,7 +15,7 @@ namespace Productify_back.Controllers
         }
 
         [HttpGet(Name = "ListProdutos")]
-        public async Task<IActionResult> ListProdutos([FromQuery] ProdutoDTO filtro, [FromQuery] int page = 1, [FromQuery] int pageSize = 5)
+        public async Task<IActionResult> ListProdutos([FromQuery] string? filtro, [FromQuery] int page = 1, [FromQuery] int pageSize = 5)
         {
             try
             {
