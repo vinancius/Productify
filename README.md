@@ -30,7 +30,7 @@ docker-compose up -d
 
 ### Banco de dados
 O banco de dados utilizado foi uma SQL Server, ao iniciar o projeto com o docker-compose. 
-Criamos um container com um banco SQL server que é consumido pela nossa api. Nosso contexto de conexão
+Foi criado um container com um banco SQL server que é consumido pela api. Nosso contexto de conexão
 cria automaticamente nosso schema no banco:
 
 ![alt text](./prints/image7.png)
