@@ -47,16 +47,16 @@ cria automaticamente nosso schema no banco:
 
 * Endpoint - Cadastrar produto:
 
-![alt text](./prints/image-3.png)
+![alt text](./prints/image3.png)
 
 * Endpoint - Listar produto pelo Id:
 
-![alt text](./prints/image-4.png)
+![alt text](./prints/image4.png)
 
 * Endpoint - Atualizar registros produto
 
-![alt text](./prints/image-5.png)
+![alt text](./prints/image5.png)
 
 * Endpoint - Deletar produto pelo Id:
 
-![alt text](./prints/image-6.png)
+![alt text](./prints/image6.png)
